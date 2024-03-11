@@ -7,9 +7,8 @@ import com.advpro.profiling.tutorial.repository.StudentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * @author muhammad.khadafi
@@ -24,18 +23,27 @@ public class StudentService {
     private StudentCourseRepository studentCourseRepository;
 
     public List<StudentCourse> getAllStudentsWithCourses() {
+        // Fetch all students and student courses
         List<Student> students = studentRepository.findAll();
-        List<StudentCourse> studentCourses = new ArrayList<>();
+        List<StudentCourse> allStudentCourses = studentCourseRepository.findAll();
+
+        // Group student courses by student id
+        Map<Long, List<StudentCourse>> studentCoursesMap = allStudentCourses.stream()
+                .collect(Collectors.groupingBy(sc -> sc.getStudent().getId()));
+
+        // Build the result
+        List<StudentCourse> result = new ArrayList<>();
         for (Student student : students) {
-            List<StudentCourse> studentCoursesByStudent = studentCourseRepository.findByStudentId(student.getId());
-            for (StudentCourse studentCourseByStudent : studentCoursesByStudent) {
-                StudentCourse studentCourse = new StudentCourse();
-                studentCourse.setStudent(student);
-                studentCourse.setCourse(studentCourseByStudent.getCourse());
-                studentCourses.add(studentCourse);
+            List<StudentCourse> studentCourses = studentCoursesMap.getOrDefault(student.getId(), Collections.emptyList());
+            for (StudentCourse studentCourse : studentCourses) {
+                StudentCourse newStudentCourse = new StudentCourse();
+                newStudentCourse.setStudent(student);
+                newStudentCourse.setCourse(studentCourse.getCourse());
+                result.add(newStudentCourse);
             }
         }
-        return studentCourses;
+
+        return result;
     }
 
     public Optional<Student> findStudentWithHighestGpa() {
