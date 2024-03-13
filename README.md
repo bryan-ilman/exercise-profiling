@@ -21,24 +21,40 @@
 # Profiling & Performance Optimization
 - **/all-student**
 
-|                          Before                          |                            After                            |
-|:--------------------------------------------------------:|:-----------------------------------------------------------:|
-| ![plot](./images/cropped-all-student-results-on-gui.png) | ![plot](./images/refactored-all-student-results-on-gui.png) |
+|                           Before                           |
+|:----------------------------------------------------------:|
+|  ![plot](./images/cropped-all-student-results-on-gui.png)  |
+
+|                            After                            |
+|:-----------------------------------------------------------:|
+| ![plot](./images/refactored-all-student-results-on-gui.png) |
 
 - **/all-student-name**
 
-|                            Before                             |                              After                               |
-|:-------------------------------------------------------------:|:----------------------------------------------------------------:|
-| ![plot](./images/cropped-all-student-name-results-on-gui.png) | ![plot](./images/refactored-all-student-name-results-on-gui.png) |
+|                            Before                             |
+|:-------------------------------------------------------------:|
+| ![plot](./images/cropped-all-student-name-results-on-gui.png) |
+
+|                              After                               |
+|:----------------------------------------------------------------:|
+| ![plot](./images/refactored-all-student-name-results-on-gui.png) |
 
 - **/highest-gpa**
 
-|                          Before                          |                            After                            |
-|:--------------------------------------------------------:|:-----------------------------------------------------------:|
-| ![plot](./images/cropped-highest-gpa-results-on-gui.png) | ![plot](./images/refactored-highest-gpa-results-on-gui.png) |
+|                           Before                            |
+|:-----------------------------------------------------------:|
+|  ![plot](./images/cropped-highest-gpa-results-on-gui.png)   |
+
+|                            After                            |
+|:-----------------------------------------------------------:|
+| ![plot](./images/refactored-highest-gpa-results-on-gui.png) |
 
 **conclusions/explanations**:
-lorem ipsum...
+Dapat dilihat dari gambar _before-and-after_ bahwa semua metode mengalami penurunan _sample time_ yang sangat signifikan, lebih dari 20%. Berikut adalah penjelasan masing-masing _refactoring_:
+
+- **getAllStudentsWithCourses**: Proses refactoring berhasil mengurangi _sample time_ dari sekitar 9 detik menjadi sekitar 1 detik. Sebelum refactoring, fungsi ini mengambil setiap siswa dan mencari kursus yang mereka ikuti secara terpisah, yang bisa menjadi tidak efisien. Setelah refactoring, kode mengambil semua siswa dan semua kursus sekaligus, kemudian mengelompokkan kursus berdasarkan ID siswa. Hal ini membuat prosesnya lebih cepat dan lebih rapi.
+- **joinStudentNames**: Proses refactoring berhasil mengurangi _sample time_ dari sekitar 1 detik menjadi sekitar 200 milidetik. Sebelumnya, fungsi ini menggunakan tipe data String untuk menggabungkan nama-nama siswa, yang bisa menjadi kurang efisien karena String bersifat immutable. Setelah refactoring, kode menggunakan StringBuilder, yang merupakan struktur data yang lebih efisien untuk memanipulasi string secara dinamis.
+- **findStudentWithHighestGpa**: Proses refactoring berhasil mengurangi _sample time_ dari sekitar 1 detik menjadi sekitar 100 milidetik. Sebelumnya, fungsi ini menggunakan perulangan untuk mencari siswa dengan GPA tertinggi, yang memerlukan lebih banyak kode dan memiliki kompleksitas waktu yang lebih tinggi. Setelah refactoring, kode menggunakan metode fungsional dari Java Stream API, yaitu max() dengan Comparator yang membandingkan GPA siswa.
 
 # Reflection
 1. JMeter berfokus pada simulasi _user traffic_ untuk menguji kinerja aplikasi secara keseluruhan, sedangkan IntelliJ Profiler lebih memusatkan perhatian pada analisis detail kode aplikasi untuk menemukan penyebab penurunan performa, seperti kebocoran memori atau bottleneck CPU.
